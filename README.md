@@ -19,3 +19,6 @@ All of the following folders are projects done during the studies:
 | [`0x02. Minimum Operations`](https://github.com/Marcusngugi25/alx-interview/tree/master/0x02-minimum_operations) | It aims to learn about minimum operations in **Python language**.|
 | [`0x03. Log Parsing`](https://github.com/Marcusngugi25/alx-interview/tree/master/0x03-log_parsing) | It aims to learn about log parsing in **Python language**.|
 | [`0x04. UTF-8 Validation`](https://github.com/Marcusngugi25/alx-interview/tree/master/0x04-utf8_validation) | It aims to learn about UTF-8 validation in **Python language**.|
+| [`0x05. N Queens`](https://github.com/Marcusngugi25/alx-interview/tree/master/0x05-nqueens) | It aims to learn about the N queens puzzle in **Python language**.|
+| [`0x06. Star Wars API`](https://github.com/Marcusngugi25/alx-interview/tree/master/0x06-starwars_api) | It aims to learn about how to use the star wars API in **JavaScript language**.|
+| [`0x07. Rotate 2D Matrix`](https://github.com/Marcusngugi25/alx-interview/tree/master/0x07-rotate_2d_matrix) | It aims to learn about how to rotate an `n` by `n` matrix 90 degrees clockwise in **Python language**.|
