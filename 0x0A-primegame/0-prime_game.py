@@ -1,103 +1,79 @@
 #!/usr/bin/python3
-
-""" Function to determine the winner of a game played x times
-with the numbers in nums.
-By Maria and Ben taking turns picking prime numbers from a list.
-"""
+"""Module for Prime Game"""
 
 
 def isWinner(x, nums):
     """
-    Function that determines the winner of a game played x times
-    with the numbers in nums.
+    Determines the winner of a set of prime number removal games.
 
     Args:
-      x (int): Number of rounds to be played.
-      nums (list): List of integers where each integer represents
-                  the maximum number in the range [1, n] for each game.
+        x (int): The number of rounds.
+        nums (list of int): A list of integers where each integer n denotes
+        a set of consecutive integers starting from 1 up to and including n.
 
     Returns:
-      str: "Maria" if Maria wins more games, "Ben" if Ben wins more games.
-          None if there's a tie.
+        str: The name of the player who won the most rounds (either "Ben"
+        or "Maria").
+        None: If the winner cannot be determined.
+
+    Raises:
+        None.
     """
-    # If there are no games to be played or the nums list is empty, return None
-    if x < 1 or not nums:
+    # Check for invalid input
+    if x <= 0 or nums is None:
         return None
-
-    def sieve(n):
-        """
-        Sieve of Eratosthenes to find all prime numbers less than
-        or equal to n.
-
-        Args:
-          n (int): The upper limit to find primes within.
-
-        Returns:
-          list: A list of prime numbers up to n.
-        """
-        # initialize a boolean list to find prime numbers up to n
-        is_prime = [True] * (n + 1)
-        is_prime[0] = is_prime[1] = False  # 0 and 1 are not primes
-        p = 2
-        # Loop over each number to mark its multiples as non-prime
-        while (p * p <= n):
-            if is_prime[p]:
-                for multiple in range(p * p, n + 1, p):
-                    is_prime[multiple] = False
-            p += 1
-        # Return the list of primes by checking the boolean list
-        return [num for num, prime in enumerate(is_prime) if prime]
-
-    # find the maximum number in nums to determine the range for the sieve
-    max_n = max(nums)
-    primes = sieve(max_n)  # generate all primes up to max_n
-
-    def play_game(n):
-        """
-        Simulate the game for a given n and return the winner.
-
-        Args:
-        n (int): The maximum number in the range [1, n] for the game.
-
-        Returns:
-        int: 0 if Ben wins, 1 if Maria wins.
-        """
-        # set of all prime numbers up to n
-        primes_set = set(primes)
-        # list of primes that are within the range [1, n]
-        primes_in_game = [p for p in primes if p <= n]
-        current_player = 0  # 0 for Maria, 1 for Ben
-
-        # simulate the game until there are no primes left to pick
-        while primes_in_game:
-            # Maria or Ben picks the smallest prime number available
-            prime = primes_in_game.pop(0)
-            primes_set.remove(prime)
-            # remove all multiples of the picked prime number from the game
-            multiples = range(prime, n + 1, prime)
-            primes_in_game = [p for p in primes_in_game if p not in multiples]
-            # switch player after each pick
-            current_player = 1 - current_player  # 0 to 1 or 1 to 0
-
-        # If current_player is 0, Ben wins, otherwise Maria wins
-        return current_player  # 0 if Ben wins, 1 if Maria wins
-
-    # Initialize counters for wins by Maria and Ben
-    maria_wins = 0
-    ben_wins = 0
-
-    # Play the game for each number in nums
-    for n in nums:
-        winner = play_game(n)
-        if winner == 0:
-            ben_wins += 1
+    if x != len(nums):
+        return None
+    # Initialize scores and array of possible prime numbers
+    ben = 0
+    maria = 0
+    # Create a list 'a' of length sorted(nums)[-1] + 1 with all elements
+    # initialized to 1
+    a = [1 for x in range(sorted(nums)[-1] + 1)]
+    # The first two elements of the list, a[0] and a[1], are set to 0
+    # because 0 and 1 are not prime numbers
+    a[0], a[1] = 0, 0
+    # Use Sieve of Eratosthenes algorithm to generate array of prime numbers
+    for i in range(2, len(a)):
+        rm_multiples(a, i)
+    # Play each round of the game
+    for i in nums:
+        # If the sum of prime numbers in the set is even, Ben wins
+        if sum(a[0:i + 1]) % 2 == 0:
+            ben += 1
         else:
-            maria_wins += 1
-
-    # Determine the overall winner based on the number of games won by each
-    if maria_wins > ben_wins:
-        return "Maria"
-    elif ben_wins > maria_wins:
+            maria += 1
+    # Determine the winner of the game
+    if ben > maria:
         return "Ben"
-    else:
-        return None
+    if maria > ben:
+        return "Maria"
+    return None
+
+
+def rm_multiples(ls, x):
+    """
+    Removes multiples of a prime number from an array of possible prime
+    numbers.
+
+    Args:
+        ls (list of int): An array of possible prime numbers.
+        x (int): The prime number to remove multiples of.
+
+    Returns:
+        None.
+
+    Raises:
+        None.
+    """
+    # This loop iterates over multiples of a prime number and marks them as
+    # non-prime by setting their corresponding value to 0 in the input
+    # list ls. Starting from 2, it sets every multiple of x up to the
+    # length of ls to 0. If the index i * x is out of range for the list ls,
+    # the try block will raise an IndexError exception, and the loop will
+    # terminate using the break statement.
+    for i in range(2, len(ls)):
+        try:
+            ls[i * x] = 0
+        except (ValueError, IndexError):
+            break
